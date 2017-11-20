@@ -7,17 +7,13 @@ class User < ApplicationRecord
       user = User.create(provider: auth.provider,
                                   uid:      auth.uid,
                                   email:    auth.info.email,
+                                  picture:  auth.info.image,
                                   password: Devise.friendly_token[0,20])
     else
       user = User.find_by_email(auth.info.email)
     end
-    user.update(access_token:         auth.credentials.token,
-                        refresh_token: auth.credentials.refresh_token)
+    user.update(access_token:   auth.credentials.token,
+                        refresh_token:   auth.credentials.refresh_token)
     user
   end
-
-  def validate_user(auth)
-    User.find(email: auth.info.email) || nil
-  end
-
 end
